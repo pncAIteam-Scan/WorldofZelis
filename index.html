@@ -41,7 +41,7 @@
       --accent: #8cff28;
       --shadow: rgba(0, 0, 0, 0.9);
       --screen-glow: rgba(140, 255, 40, 0.42);
-      --font-scale: 1;
+      --font-scale: 1.15;
     }
 
     body.light {
@@ -65,7 +65,7 @@
       min-height: 100vh;
       background: var(--bg);
       color: var(--ink);
-      font-family: "ARI", monospace;
+      font-family: "ARI";
       font-size: calc(16px * var(--font-scale));
       display: flex;
       justify-content: center;
@@ -141,7 +141,7 @@
       right: 22px;
       z-index: 5;
       text-align: right;
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
@@ -162,7 +162,7 @@
       border: 2px solid var(--accent);
       background: #000;
       color: var(--accent);
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       text-transform: uppercase;
       padding: 8px 10px;
       cursor: pointer;
@@ -178,7 +178,7 @@
       z-index: 2;
       min-height: 720px;
       display: grid;
-      grid-template-columns: minmax(340px, 470px) 1fr;
+      grid-template-columns: minmax(320px, 470px) 1fr;
       align-items: center;
       gap: 32px;
       padding: 52px;
@@ -186,6 +186,7 @@
 
     .title-panel {
       width: 100%;
+      max-width: 470px;
       background: var(--panel);
       border: 4px solid var(--border);
       box-shadow:
@@ -193,38 +194,42 @@
         0 0 28px rgba(0, 0, 0, 0.65);
       padding: 30px;
       backdrop-filter: blur(2px);
+      overflow: hidden;
     }
 
     .world-of {
-      font-family: "ARI Display", monospace;
+      font-family: "ARI Display";
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-size: clamp(2rem, 4.5vw, 4rem);
-      line-height: 0.9;
+      letter-spacing: 0.08em;
+      font-size: clamp(1.65rem, 3.8vw, 3.15rem);
+      line-height: 0.95;
+      max-width: 100%;
     }
 
     .zelis {
-      font-family: "Hydrating Lip", fantasy;
+      font-family: "Hydrating Lip";
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-      font-size: clamp(5.8rem, 12vw, 11rem);
-      line-height: 0.74;
+      letter-spacing: 0.015em;
+      font-size: clamp(4.4rem, 9vw, 7.8rem);
+      line-height: 0.78;
       color: var(--ink);
+      max-width: 100%;
+      overflow-wrap: normal;
       text-shadow:
-        4px 4px 0 #000,
+        3px 3px 0 #000,
         0 0 18px rgba(255, 255, 255, 0.16);
     }
 
     body.light .zelis {
       text-shadow:
-        4px 4px 0 rgba(0, 0, 0, 0.25),
+        3px 3px 0 rgba(0, 0, 0, 0.25),
         0 0 18px rgba(0, 0, 0, 0.08);
     }
 
     .subtitle {
       margin-top: 18px;
       color: var(--accent);
-      font-family: "Mintsoda", "ARI Bold", monospace;
+      font-family: "Mintsoda";
       font-size: clamp(1.25rem, 2.5vw, 2rem);
       letter-spacing: 0.08em;
       text-shadow: 0 0 12px var(--screen-glow);
@@ -244,7 +249,7 @@
       background: rgba(0, 0, 0, 0.72);
       border: 3px solid var(--border);
       padding: 16px 18px 15px 48px;
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       text-transform: uppercase;
       box-shadow: 5px 5px 0 var(--shadow);
       transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
@@ -281,7 +286,7 @@
       display: block;
       margin-top: 5px;
       color: var(--muted);
-      font-family: "ARI", monospace;
+      font-family: "ARI";
       font-size: 0.75rem;
       letter-spacing: 0.04em;
     }
@@ -302,7 +307,7 @@
       border: 3px solid var(--border);
       background: var(--panel);
       color: var(--ink);
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       font-size: 1.4rem;
       cursor: pointer;
       box-shadow: 5px 5px 0 var(--shadow);
@@ -376,7 +381,7 @@
 
     .modal h2 {
       margin: 0 0 18px;
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--accent);
@@ -389,7 +394,7 @@
       border: 2px solid var(--border);
       background: transparent;
       color: var(--ink);
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       cursor: pointer;
       padding: 5px 9px;
     }
@@ -418,7 +423,7 @@
 
     .badge strong {
       display: block;
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       text-transform: uppercase;
       margin-bottom: 6px;
     }
@@ -441,7 +446,7 @@
       border: 2px solid var(--border);
       background: transparent;
       color: var(--ink);
-      font-family: "ARI Bold", monospace;
+      font-family: "ARI Bold";
       padding: 9px 11px;
       cursor: pointer;
       text-transform: uppercase;
@@ -480,7 +485,16 @@
       }
 
       .title-panel {
+        max-width: 100%;
         padding: 22px;
+      }
+
+      .world-of {
+        font-size: clamp(1.45rem, 8vw, 2.4rem);
+      }
+
+      .zelis {
+        font-size: clamp(3.8rem, 18vw, 6.4rem);
       }
 
       .version-area {
@@ -599,9 +613,9 @@
       <div class="option-row">
         <span>Font Size</span>
         <div>
-          <button class="small-button" onclick="setFontSize('small')">Small</button>
           <button class="small-button" onclick="setFontSize('normal')">Normal</button>
           <button class="small-button" onclick="setFontSize('large')">Large</button>
+          <button class="small-button" onclick="setFontSize('larger')">Larger</button>
         </div>
       </div>
     </section>
@@ -660,9 +674,9 @@
 
     function setFontSize(size) {
       const sizes = {
-        small: 0.9,
-        normal: 1,
-        large: 1.15
+        normal: 1.15,
+        large: 1.3,
+        larger: 1.45
       };
 
       document.documentElement.style.setProperty("--font-scale", sizes[size]);
