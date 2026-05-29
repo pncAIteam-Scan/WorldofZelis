@@ -26,25 +26,34 @@
       src: url("assets/fonts/HydratingLip.ttf") format("truetype");
     }
 
+    @font-face {
+      font-family: "Mintsoda";
+      src: url("assets/fonts/MintsodaLimeGreen13X16Regular-KVvzA.ttf") format("truetype");
+    }
+
     :root {
-      --bg: #f2f0ea;
-      --ink: #111;
-      --muted: #555;
-      --panel: #ffffff;
-      --border: #111;
-      --shadow: rgba(0, 0, 0, 0.25);
-      --static: rgba(0, 0, 0, 0.08);
+      --bg: #000;
+      --ink: #f5f5f5;
+      --muted: #bcbcbc;
+      --panel: rgba(5, 5, 5, 0.82);
+      --panel-solid: #080808;
+      --border: #f5f5f5;
+      --accent: #8cff28;
+      --shadow: rgba(0, 0, 0, 0.9);
+      --screen-glow: rgba(140, 255, 40, 0.42);
       --font-scale: 1;
     }
 
-    body.dark {
-      --bg: #080808;
-      --ink: #f2f2f2;
-      --muted: #b7b7b7;
-      --panel: #111;
-      --border: #f2f2f2;
-      --shadow: rgba(255, 255, 255, 0.18);
-      --static: rgba(255, 255, 255, 0.08);
+    body.light {
+      --bg: #f2f2f2;
+      --ink: #050505;
+      --muted: #333;
+      --panel: rgba(245, 245, 245, 0.86);
+      --panel-solid: #f5f5f5;
+      --border: #050505;
+      --accent: #2f7f00;
+      --shadow: rgba(0, 0, 0, 0.35);
+      --screen-glow: rgba(47, 127, 0, 0.3);
     }
 
     * {
@@ -54,297 +63,368 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        repeating-linear-gradient(
-          0deg,
-          var(--static),
-          var(--static) 1px,
-          transparent 1px,
-          transparent 4px
-        ),
-        var(--bg);
+      background: var(--bg);
       color: var(--ink);
       font-family: "ARI", monospace;
+      font-size: calc(16px * var(--font-scale));
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px;
-      transition: background 0.2s ease, color 0.2s ease;
-      font-size: calc(16px * var(--font-scale));
+      padding: 18px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18)),
+        url("assets/images/world-of-zelis-bg.png") center / cover no-repeat;
+      filter: grayscale(1) contrast(1.12) brightness(0.74);
+      z-index: -3;
+    }
+
+    body.light::before {
+      filter: grayscale(1) contrast(1.05) brightness(0.92);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px,
+          transparent 4px
+        ),
+        radial-gradient(circle at center, transparent 0 44%, rgba(0, 0, 0, 0.68) 100%);
+      z-index: -2;
     }
 
     .game-frame {
-      width: min(960px, 100%);
-      min-height: 640px;
-      border: 5px solid var(--border);
-      box-shadow: 10px 10px 0 var(--shadow);
-      background: var(--bg);
+      width: min(1180px, 100%);
+      min-height: 720px;
       position: relative;
+      border: 4px solid var(--border);
+      box-shadow:
+        0 0 0 4px #000,
+        14px 14px 0 var(--shadow);
       overflow: hidden;
-      padding: 34px;
+      background: rgba(0, 0, 0, 0.28);
     }
 
     .game-frame::before {
       content: "";
       position: absolute;
       inset: 0;
-      pointer-events: none;
       background:
-        radial-gradient(circle at 20% 20%, transparent 0 20%, var(--static) 21%, transparent 22%),
-        radial-gradient(circle at 80% 70%, transparent 0 15%, var(--static) 16%, transparent 17%);
-      opacity: 0.45;
-      mix-blend-mode: multiply;
+        linear-gradient(90deg, rgba(0, 0, 0, 0.82), transparent 38%, rgba(0, 0, 0, 0.35)),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.6), transparent 46%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .layout {
+    body.light .game-frame::before {
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.58), transparent 38%, rgba(255, 255, 255, 0.25)),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.48), transparent 46%);
+    }
+
+    .version-area {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      z-index: 5;
+      text-align: right;
+      font-family: "ARI Bold", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .version {
+      display: inline-block;
+      background: var(--panel);
+      border: 2px solid var(--border);
+      padding: 8px 10px;
+      box-shadow: 4px 4px 0 var(--shadow);
+      font-size: 0.78rem;
+    }
+
+    .whats-new-button {
+      display: block;
+      margin-top: 8px;
+      margin-left: auto;
+      border: 2px solid var(--accent);
+      background: #000;
+      color: var(--accent);
+      font-family: "ARI Bold", monospace;
+      text-transform: uppercase;
+      padding: 8px 10px;
+      cursor: pointer;
+      box-shadow: 0 0 14px var(--screen-glow);
+    }
+
+    body.light .whats-new-button {
+      background: #fff;
+    }
+
+    .content {
       position: relative;
-      z-index: 1;
+      z-index: 2;
+      min-height: 720px;
       display: grid;
-      grid-template-columns: 1fr 1.2fr 1fr;
-      gap: 28px;
-      align-items: end;
-      min-height: 560px;
+      grid-template-columns: minmax(340px, 470px) 1fr;
+      align-items: center;
+      gap: 32px;
+      padding: 52px;
     }
 
-    .title-area {
-      grid-column: 1 / -1;
-      text-align: center;
-      align-self: start;
+    .title-panel {
+      width: 100%;
+      background: var(--panel);
+      border: 4px solid var(--border);
+      box-shadow:
+        8px 8px 0 var(--shadow),
+        0 0 28px rgba(0, 0, 0, 0.65);
+      padding: 30px;
+      backdrop-filter: blur(2px);
     }
 
     .world-of {
       font-family: "ARI Display", monospace;
-      font-size: clamp(1.9rem, 5vw, 3.8rem);
-      line-height: 0.9;
-      letter-spacing: 0.08em;
       text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: clamp(2rem, 4.5vw, 4rem);
+      line-height: 0.9;
     }
 
     .zelis {
       font-family: "Hydrating Lip", fantasy;
-      font-size: clamp(5rem, 14vw, 10.5rem);
-      line-height: 0.75;
-      letter-spacing: 0.03em;
       text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: clamp(5.8rem, 12vw, 11rem);
+      line-height: 0.74;
+      color: var(--ink);
       text-shadow:
-        4px 4px 0 var(--shadow),
-        0 8px 0 rgba(0, 0, 0, 0.12);
+        4px 4px 0 #000,
+        0 0 18px rgba(255, 255, 255, 0.16);
     }
 
-    body.dark .zelis {
+    body.light .zelis {
       text-shadow:
-        4px 4px 0 rgba(255, 255, 255, 0.18),
-        0 8px 0 rgba(255, 255, 255, 0.08);
+        4px 4px 0 rgba(0, 0, 0, 0.25),
+        0 0 18px rgba(0, 0, 0, 0.08);
     }
 
     .subtitle {
       margin-top: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      color: var(--muted);
-      font-family: "ARI Bold", monospace;
-      text-transform: uppercase;
+      color: var(--accent);
+      font-family: "Mintsoda", "ARI Bold", monospace;
+      font-size: clamp(1.25rem, 2.5vw, 2rem);
       letter-spacing: 0.08em;
-      font-size: 0.95rem;
+      text-shadow: 0 0 12px var(--screen-glow);
     }
 
-    .subtitle::before,
-    .subtitle::after {
-      content: "";
-      display: block;
-      width: 90px;
-      height: 2px;
-      background: var(--ink);
-    }
-
-    .left-decor,
-    .right-decor {
-      min-height: 330px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 20px;
-    }
-
-    .computer {
-      border: 4px solid var(--border);
-      width: 170px;
-      height: 130px;
-      background: var(--panel);
-      box-shadow: 7px 7px 0 var(--shadow);
-      padding: 14px;
-      margin-left: 10px;
-      position: relative;
-    }
-
-    .computer::before {
-      content: "";
-      display: block;
-      height: 70px;
-      border: 3px solid var(--border);
-      background:
-        linear-gradient(var(--static), var(--static)),
-        var(--bg);
-    }
-
-    .computer::after {
-      content: ":)";
-      position: absolute;
-      left: 58px;
-      top: 35px;
-      font-family: "ARI Bold", monospace;
-      font-size: 1.5rem;
-    }
-
-    .desk {
-      width: 240px;
-      height: 90px;
-      border-top: 5px solid var(--border);
-      border-left: 4px solid var(--border);
-      border-right: 4px solid var(--border);
-      background: repeating-linear-gradient(
-        90deg,
-        var(--panel),
-        var(--panel) 8px,
-        transparent 8px,
-        transparent 14px
-      );
-      box-shadow: 7px 7px 0 var(--shadow);
-    }
-
-    .clock {
-      width: 68px;
-      height: 68px;
-      border: 4px solid var(--border);
-      border-radius: 50%;
-      background: var(--panel);
-      position: absolute;
-      top: 130px;
-      left: 58px;
-    }
-
-    .clock::before {
-      content: "";
-      position: absolute;
-      width: 3px;
-      height: 22px;
-      background: var(--ink);
-      left: 29px;
-      top: 12px;
-    }
-
-    .clock::after {
-      content: "";
-      position: absolute;
-      width: 22px;
-      height: 3px;
-      background: var(--ink);
-      left: 29px;
-      top: 32px;
-      transform: rotate(-20deg);
-      transform-origin: left center;
-    }
-
-    .menu-panel {
-      align-self: center;
-      justify-self: center;
-      width: min(360px, 100%);
-      display: flex;
-      flex-direction: column;
+    .episode-list {
+      margin-top: 34px;
+      display: grid;
       gap: 14px;
-      margin-top: 24px;
-    }
-
-    .menu-button {
-      appearance: none;
-      border: 3px solid var(--border);
-      background: var(--panel);
-      color: var(--ink);
-      font-family: "ARI Bold", monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      font-size: 1.05rem;
-      padding: 15px 18px;
-      cursor: pointer;
-      box-shadow: 5px 5px 0 var(--shadow);
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-      text-align: left;
-    }
-
-    .menu-button:hover,
-    .menu-button:focus {
-      transform: translate(3px, 3px);
-      box-shadow: 2px 2px 0 var(--shadow);
-      outline: 2px dashed var(--ink);
-      outline-offset: 4px;
-    }
-
-    .menu-button span {
-      display: block;
-      color: var(--muted);
-      font-size: 0.72rem;
-      margin-top: 5px;
-    }
-
-    .drawer {
-      display: none;
-      border: 3px solid var(--border);
-      background: var(--panel);
-      padding: 16px;
-      box-shadow: 5px 5px 0 var(--shadow);
-    }
-
-    .drawer.active {
-      display: block;
-    }
-
-    .drawer h2 {
-      margin: 0 0 12px;
-      font-family: "ARI Bold", monospace;
-      text-transform: uppercase;
-      font-size: 1rem;
     }
 
     .episode-link {
+      position: relative;
       display: block;
-      border: 2px solid var(--border);
       color: var(--ink);
       text-decoration: none;
-      padding: 12px;
-      margin-bottom: 10px;
-      background: var(--bg);
+      background: rgba(0, 0, 0, 0.72);
+      border: 3px solid var(--border);
+      padding: 16px 18px 15px 48px;
       font-family: "ARI Bold", monospace;
       text-transform: uppercase;
+      box-shadow: 5px 5px 0 var(--shadow);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+    }
+
+    body.light .episode-link {
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .episode-link::before {
+      content: "▶";
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      opacity: 0;
+    }
+
+    .episode-link:hover,
+    .episode-link:focus {
+      transform: translate(3px, 3px);
+      box-shadow: 2px 2px 0 var(--shadow);
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .episode-link:hover::before,
+    .episode-link:focus::before {
+      opacity: 1;
     }
 
     .episode-link small {
       display: block;
+      margin-top: 5px;
       color: var(--muted);
-      margin-top: 4px;
       font-family: "ARI", monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .icon-menu {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      z-index: 5;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .icon-button {
+      width: 58px;
+      height: 58px;
+      border: 3px solid var(--border);
+      background: var(--panel);
+      color: var(--ink);
+      font-family: "ARI Bold", monospace;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 var(--shadow);
+      display: grid;
+      place-items: center;
+      position: relative;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+    }
+
+    .icon-button:hover,
+    .icon-button:focus {
+      transform: translate(3px, 3px);
+      box-shadow: 2px 2px 0 var(--shadow);
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: none;
+    }
+
+    .icon-button::after {
+      content: attr(data-label);
+      position: absolute;
+      right: 0;
+      bottom: 70px;
+      white-space: nowrap;
+      background: var(--panel-solid);
+      color: var(--ink);
+      border: 2px solid var(--border);
+      padding: 7px 9px;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: opacity 0.1s ease, transform 0.1s ease;
+    }
+
+    .icon-button:hover::after,
+    .icon-button:focus::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.72);
+      z-index: 99;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      width: min(620px, 100%);
+      max-height: min(720px, 90vh);
+      overflow: auto;
+      background: var(--panel-solid);
+      color: var(--ink);
+      border: 4px solid var(--border);
+      box-shadow:
+        10px 10px 0 var(--shadow),
+        0 0 30px rgba(140, 255, 40, 0.12);
+      padding: 24px;
+      position: relative;
+    }
+
+    .modal h2 {
+      margin: 0 0 18px;
+      font-family: "ARI Bold", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    .close-button {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+      font-family: "ARI Bold", monospace;
+      cursor: pointer;
+      padding: 5px 9px;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: none;
     }
 
     .badge-grid {
       display: grid;
-      gap: 10px;
+      gap: 12px;
     }
 
     .badge {
       border: 2px solid var(--border);
-      padding: 10px;
-      background: var(--bg);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 14px;
+    }
+
+    body.light .badge {
+      background: rgba(0, 0, 0, 0.05);
     }
 
     .badge strong {
       display: block;
       font-family: "ARI Bold", monospace;
       text-transform: uppercase;
+      margin-bottom: 6px;
     }
 
     .badge.locked {
-      opacity: 0.55;
+      opacity: 0.58;
       filter: grayscale(1);
     }
 
@@ -352,131 +432,70 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       border-bottom: 2px dotted var(--border);
-      padding: 10px 0;
+      padding: 14px 0;
     }
 
     .small-button {
       border: 2px solid var(--border);
-      background: var(--bg);
+      background: transparent;
       color: var(--ink);
       font-family: "ARI Bold", monospace;
-      padding: 8px 10px;
+      padding: 9px 11px;
       cursor: pointer;
       text-transform: uppercase;
+      margin: 3px;
     }
 
-    .cabinet {
-      width: 130px;
-      align-self: flex-end;
-      margin-left: auto;
-      margin-right: 10px;
-      border: 4px solid var(--border);
-      background: var(--panel);
-      box-shadow: 7px 7px 0 var(--shadow);
-      padding: 10px;
+    .small-button:hover,
+    .small-button:focus {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: none;
     }
 
-    .drawer-box {
-      height: 58px;
-      border: 3px solid var(--border);
-      margin-bottom: 8px;
-      position: relative;
-      background: var(--bg);
-    }
-
-    .drawer-box::after {
-      content: "";
-      position: absolute;
-      width: 32px;
-      height: 6px;
-      border: 2px solid var(--border);
-      left: 50%;
-      top: 18px;
-      transform: translateX(-50%);
-      background: var(--panel);
-    }
-
-    .plant {
-      width: 90px;
-      height: 130px;
-      margin-left: auto;
-      margin-right: 32px;
-      position: relative;
-    }
-
-    .plant::before {
-      content: "╲│╱";
-      position: absolute;
-      top: 0;
-      left: 10px;
-      font-size: 3rem;
-      font-family: monospace;
-    }
-
-    .plant::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 24px;
-      width: 48px;
-      height: 48px;
-      border: 4px solid var(--border);
-      background: var(--panel);
-    }
-
-    .footer-help {
-      position: absolute;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
+    .version-note {
+      line-height: 1.55;
       color: var(--muted);
-      font-family: "ARI Bold", monospace;
-      text-transform: uppercase;
-      font-size: 0.78rem;
-      white-space: nowrap;
     }
 
-    @media (max-width: 820px) {
+    .version-note strong {
+      color: var(--ink);
+    }
+
+    @media (max-width: 860px) {
       body {
-        padding: 12px;
+        padding: 10px;
       }
 
       .game-frame {
         min-height: auto;
-        padding: 24px;
       }
 
-      .layout {
-        grid-template-columns: 1fr;
+      .content {
         min-height: auto;
+        grid-template-columns: 1fr;
+        padding: 92px 22px 110px;
       }
 
-      .left-decor,
-      .right-decor,
-      .clock,
-      .plant,
-      .cabinet,
-      .desk,
-      .computer {
-        display: none;
+      .title-panel {
+        padding: 22px;
       }
 
-      .menu-panel {
-        margin-top: 8px;
+      .version-area {
+        top: 14px;
+        right: 14px;
       }
 
-      .subtitle::before,
-      .subtitle::after {
-        width: 40px;
+      .icon-menu {
+        right: 18px;
+        bottom: 18px;
       }
 
-      .footer-help {
-        position: static;
-        transform: none;
-        text-align: center;
-        margin-top: 28px;
+      .icon-button {
+        width: 54px;
+        height: 54px;
       }
     }
   </style>
@@ -484,29 +503,20 @@
 
 <body>
   <main class="game-frame" aria-label="World of Zelis title screen">
-    <div class="clock" aria-hidden="true"></div>
+    <div class="version-area">
+      <div class="version">Version 1.0</div>
+      <button class="whats-new-button" onclick="openModal('whats-new-modal')">
+        What's New
+      </button>
+    </div>
 
-    <section class="layout">
-      <div class="title-area">
+    <section class="content">
+      <section class="title-panel">
         <div class="world-of">World of</div>
         <div class="zelis">Zelis</div>
-        <div class="subtitle">Retro horror at the office</div>
-      </div>
+        <div class="subtitle">世界のセリス</div>
 
-      <aside class="left-decor" aria-hidden="true">
-        <div class="computer"></div>
-        <div class="desk"></div>
-      </aside>
-
-      <section class="menu-panel" aria-label="Main menu">
-        <button class="menu-button" onclick="toggleDrawer('start')">
-          Start
-          <span>Choose your episode</span>
-        </button>
-
-        <div class="drawer active" id="start">
-          <h2>Select Episode</h2>
-
+        <nav class="episode-list" aria-label="Episode selection">
           <a class="episode-link" href="episodes/episode-1/index.html">
             1. Episode 1
             <small>The New Hire</small>
@@ -521,85 +531,130 @@
             3. Episode 3
             <small>The Layoff</small>
           </a>
-        </div>
-
-        <button class="menu-button" onclick="toggleDrawer('badges')">
-          Badge Showcase
-          <span>View what you have unlocked</span>
-        </button>
-
-        <div class="drawer" id="badges">
-          <h2>Badges</h2>
-
-          <div class="badge-grid">
-            <div class="badge locked">
-              <strong>???</strong>
-              Complete Episode 1 to reveal this badge.
-            </div>
-
-            <div class="badge locked">
-              <strong>???</strong>
-              Complete Episode 2 to reveal this badge.
-            </div>
-
-            <div class="badge locked">
-              <strong>???</strong>
-              Complete Episode 3 to reveal this badge.
-            </div>
-          </div>
-        </div>
-
-        <button class="menu-button" onclick="toggleDrawer('options')">
-          Options
-          <span>Theme, readability, and display</span>
-        </button>
-
-        <div class="drawer" id="options">
-          <h2>Options</h2>
-
-          <div class="option-row">
-            <span>Theme</span>
-            <button class="small-button" onclick="toggleTheme()">Toggle Light / Dark</button>
-          </div>
-
-          <div class="option-row">
-            <span>Font Size</span>
-            <div>
-              <button class="small-button" onclick="setFontSize('small')">Small</button>
-              <button class="small-button" onclick="setFontSize('normal')">Normal</button>
-              <button class="small-button" onclick="setFontSize('large')">Large</button>
-            </div>
-          </div>
-        </div>
+        </nav>
       </section>
-
-      <aside class="right-decor" aria-hidden="true">
-        <div class="plant"></div>
-        <div class="cabinet">
-          <div class="drawer-box"></div>
-          <div class="drawer-box"></div>
-          <div class="drawer-box"></div>
-          <div class="drawer-box"></div>
-        </div>
-      </aside>
     </section>
 
-    <div class="footer-help">↑↓ : Select &nbsp;&nbsp; Enter : Confirm</div>
+    <section class="icon-menu" aria-label="Game options">
+      <button
+        class="icon-button"
+        onclick="openModal('badges-modal')"
+        aria-label="Open badge showcase"
+        data-label="Badge Showcase"
+        title="Badge Showcase">
+        ★
+      </button>
+
+      <button
+        class="icon-button"
+        onclick="openModal('options-modal')"
+        aria-label="Open options"
+        data-label="Options"
+        title="Options">
+        ⚙
+      </button>
+    </section>
   </main>
 
-  <script>
-    const drawers = document.querySelectorAll(".drawer");
+  <div class="modal-backdrop" id="badges-modal" onclick="backdropClose(event, 'badges-modal')">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="badges-title">
+      <button class="close-button" onclick="closeModal('badges-modal')" aria-label="Close badge showcase">
+        X
+      </button>
 
-    function toggleDrawer(id) {
-      drawers.forEach(drawer => {
-        drawer.classList.toggle("active", drawer.id === id);
+      <h2 id="badges-title">Badge Showcase</h2>
+
+      <div class="badge-grid">
+        <div class="badge locked">
+          <strong>???</strong>
+          Complete Episode 1 to reveal this badge.
+        </div>
+
+        <div class="badge locked">
+          <strong>???</strong>
+          Complete Episode 2 to reveal this badge.
+        </div>
+
+        <div class="badge locked">
+          <strong>???</strong>
+          Complete Episode 3 to reveal this badge.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="options-modal" onclick="backdropClose(event, 'options-modal')">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="options-title">
+      <button class="close-button" onclick="closeModal('options-modal')" aria-label="Close options">
+        X
+      </button>
+
+      <h2 id="options-title">Options</h2>
+
+      <div class="option-row">
+        <span>Theme</span>
+        <button class="small-button" onclick="toggleTheme()">Toggle Light / Dark</button>
+      </div>
+
+      <div class="option-row">
+        <span>Font Size</span>
+        <div>
+          <button class="small-button" onclick="setFontSize('small')">Small</button>
+          <button class="small-button" onclick="setFontSize('normal')">Normal</button>
+          <button class="small-button" onclick="setFontSize('large')">Large</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="whats-new-modal" onclick="backdropClose(event, 'whats-new-modal')">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="whats-new-title">
+      <button class="close-button" onclick="closeModal('whats-new-modal')" aria-label="Close what's new">
+        X
+      </button>
+
+      <h2 id="whats-new-title">What's New</h2>
+
+      <div class="version-note">
+        <p><strong>Version 1.0 placeholder notes:</strong></p>
+        <p>
+          Welcome to the first public build of World of Zelis. This area can be used
+          for update notes, new episode releases, badge changes, bug fixes, and other
+          tiny terrifying improvements hiding in the walls.
+        </p>
+        <p>
+          Placeholder: Episode 1, Episode 2, and Episode 3 are now visible from the
+          main title screen. Badge Showcase and Options now live as lower-right icons.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById(id).classList.add("active");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("active");
+    }
+
+    function backdropClose(event, id) {
+      if (event.target.id === id) {
+        closeModal(id);
+      }
+    }
+
+    function closeAllModals() {
+      document.querySelectorAll(".modal-backdrop").forEach(modal => {
+        modal.classList.remove("active");
       });
     }
 
     function toggleTheme() {
-      document.body.classList.toggle("dark");
+      document.body.classList.toggle("light");
 
-      const theme = document.body.classList.contains("dark") ? "dark" : "light";
+      const theme = document.body.classList.contains("light") ? "light" : "dark";
       localStorage.setItem("woz-theme", theme);
     }
 
@@ -618,14 +673,20 @@
       const savedTheme = localStorage.getItem("woz-theme");
       const savedFontSize = localStorage.getItem("woz-font-size");
 
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark");
+      if (savedTheme === "light") {
+        document.body.classList.add("light");
       }
 
       if (savedFontSize) {
         setFontSize(savedFontSize);
       }
     }
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeAllModals();
+      }
+    });
 
     loadPreferences();
   </script>
